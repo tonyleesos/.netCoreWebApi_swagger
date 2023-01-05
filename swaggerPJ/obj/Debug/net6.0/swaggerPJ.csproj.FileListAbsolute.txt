@@ -172,3 +172,4 @@ G:\asp.netCore6_swagger\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\refint
 G:\asp.netCore6_swagger\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\swaggerPJ.pdb
 G:\asp.netCore6_swagger\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\swaggerPJ.genruntimeconfig.cache
 G:\asp.netCore6_swagger\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\ref\swaggerPJ.dll
+G:\asp.netCore6_swagger\.netCoreWebApi_swagger\swaggerPJ\bin\Debug\net6.0\Newtonsoft.Json.dll

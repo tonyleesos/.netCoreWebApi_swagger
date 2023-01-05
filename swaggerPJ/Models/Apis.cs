@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace swaggerPJ.Models;
 
-public partial class Api
+public partial class Apis
 {
     public int Id { get; set; }
 
@@ -12,4 +13,5 @@ public partial class Api
     public string? Description { get; set; }
 
     public string Version { get; set; } = null!;
+
 }

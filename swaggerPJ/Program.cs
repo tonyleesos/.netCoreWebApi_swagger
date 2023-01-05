@@ -6,7 +6,6 @@ using System.Text.Unicode;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     //原本是 JsonNamingPolicy.CamelCase，強制頭文字轉小寫，我偏好維持原樣，設為null
@@ -15,7 +14,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Encoder =
         JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs);
 });
-
 builder.Services.AddMvc().AddJsonOptions(options =>
 {
     //原本是 JsonNamingPolicy.CamelCase，強制頭文字轉小寫，我偏好維持原樣，設為null
@@ -24,7 +22,6 @@ builder.Services.AddMvc().AddJsonOptions(options =>
     options.JsonSerializerOptions.Encoder =
         JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs);
 });
-
 builder.Services.AddRazorPages().AddJsonOptions(options =>
 {
     //原本是 JsonNamingPolicy.CamelCase，強制頭文字轉小寫，我偏好維持原樣，設為null
@@ -34,7 +31,7 @@ builder.Services.AddRazorPages().AddJsonOptions(options =>
         JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs);
 });
 
-//dbContext
+//dbContext ConnectString use in appsettings.json
 builder.Services.AddDbContext<SwaggerContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
 

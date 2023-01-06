@@ -12,4 +12,10 @@ public partial class ApiPath
     public string? Path { get; set; }
 
     public string? Description { get; set; }
+
+    public virtual Apis? Apis { get; set; }
+
+    public virtual ICollection<ApiPathMethod> ApiPathMethods { get; } = new List<ApiPathMethod>();
+
+    public virtual ICollection<ApiTag> ApiTags { get; } = new List<ApiTag>();
 }

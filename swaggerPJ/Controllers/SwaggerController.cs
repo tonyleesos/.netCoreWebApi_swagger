@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using swaggerPJ.common;
 using swaggerPJ.Models;
+using System;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -19,13 +21,36 @@ namespace swaggerPJ.Controllers
         [HttpGet]
         public FileContentResult JsonContentGetContent()
         {
-            Apis apis = new Apis
+            // json 資料內容
+            #pragma warning disable CS8670 // 物件或集合初始設定式意味會解除參考可能為 null 的成員。
+            SwaggerJsonData swaggerJsonData = new SwaggerJsonData()
             {
-                Title = "智慧影像平台",
-                Description = "智聯所內部專用",
-                Version = "v1",
+                openApi = "3.0.1",
+                ApisData = {
+                     Title = "智慧影像平台",
+                     Description = "智聯所內部專用",
+                     Version = "1.0",
+                     ApiComponents = new List<ApiComponent>(),
+                     ApiPaths = new List<ApiPath>(),
+                     ApiServers=  new List<ApiServer>(),
+                },
+                ApiPathData = {
+
+                },
+                ApiComponentData = {
+
+                },
+                ApiServerData =
+                {
+
+                },
+
+                
             };
-            string? apisJson = JsonConvert.SerializeObject(apis);
+           
+            #pragma warning restore CS8670 // 物件或集合初始設定式意味會解除參考可能為 null 的成員。
+
+            string? apisJson = JsonConvert.SerializeObject(swaggerJsonData);
             var fileName = "xyz.json";
             var mimeType = "application/json";
             var fileBytes = Encoding.Default.GetBytes(apisJson);

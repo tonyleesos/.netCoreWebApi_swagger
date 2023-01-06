@@ -25,11 +25,19 @@ public partial class SwaggerContext : DbContext
 
     public virtual DbSet<ApiPath> ApiPaths { get; set; }
 
+    public virtual DbSet<ApiPathMethod> ApiPathMethods { get; set; }
+
+    public virtual DbSet<ApiProperty> ApiProperties { get; set; }
+
     public virtual DbSet<ApiRefferenceProperty> ApiRefferenceProperties { get; set; }
+
+    public virtual DbSet<ApiRequestbody> ApiRequestbodies { get; set; }
 
     public virtual DbSet<ApiResponse> ApiResponses { get; set; }
 
     public virtual DbSet<ApiServer> ApiServers { get; set; }
+
+    public virtual DbSet<ApiTag> ApiTags { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -69,6 +77,10 @@ public partial class SwaggerContext : DbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(255)
                 .HasColumnName("type");
+
+            entity.HasOne(d => d.Api).WithMany(p => p.ApiComponents)
+                .HasForeignKey(d => d.ApiId)
+                .HasConstraintName("FK_api_components_apis");
         });
 
         modelBuilder.Entity<ApiOperation>(entity =>
@@ -118,6 +130,48 @@ public partial class SwaggerContext : DbContext
             entity.Property(e => e.Path)
                 .HasMaxLength(255)
                 .HasColumnName("path");
+
+            entity.HasOne(d => d.Apis).WithMany(p => p.ApiPaths)
+                .HasForeignKey(d => d.ApiId)
+                .HasConstraintName("FK_api_paths_apis");
+        });
+
+        modelBuilder.Entity<ApiPathMethod>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__api_path__3214EC07928985B0");
+
+            entity.ToTable("api_path_method");
+
+            entity.Property(e => e.ApiPathsId).HasColumnName("api_paths_id");
+            entity.Property(e => e.Method)
+                .HasMaxLength(255)
+                .HasColumnName("method");
+
+            entity.HasOne(d => d.ApiPaths).WithMany(p => p.ApiPathMethods)
+                .HasForeignKey(d => d.ApiPathsId)
+                .HasConstraintName("FK_api_path_method_api_paths");
+        });
+
+        modelBuilder.Entity<ApiProperty>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__api_prop__3214EC0767ED0B65");
+
+            entity.ToTable("api_properties");
+
+            entity.Property(e => e.ApiComponentsId).HasColumnName("api_components_id");
+            entity.Property(e => e.Format)
+                .HasMaxLength(255)
+                .HasColumnName("format");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+            entity.Property(e => e.Type)
+                .HasMaxLength(255)
+                .HasColumnName("type");
+
+            entity.HasOne(d => d.ApiComponents).WithMany(p => p.ApiProperties)
+                .HasForeignKey(d => d.ApiComponentsId)
+                .HasConstraintName("FK_api_properties_api_components");
         });
 
         modelBuilder.Entity<ApiRefferenceProperty>(entity =>
@@ -136,6 +190,25 @@ public partial class SwaggerContext : DbContext
                 .HasColumnName("type");
         });
 
+        modelBuilder.Entity<ApiRequestbody>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__content__3214EC0728C4CD7D");
+
+            entity.ToTable("api_requestbody");
+
+            entity.Property(e => e.ApiMethodId).HasColumnName("api_method_id");
+            entity.Property(e => e.Ref)
+                .HasMaxLength(255)
+                .HasColumnName("$ref");
+            entity.Property(e => e.SchemaType)
+                .HasMaxLength(255)
+                .HasColumnName("schema_type");
+
+            entity.HasOne(d => d.ApiMethod).WithMany(p => p.ApiRequestbodies)
+                .HasForeignKey(d => d.ApiMethodId)
+                .HasConstraintName("FK_api_requestbody_api_path_method");
+        });
+
         modelBuilder.Entity<ApiResponse>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__api_resp__3213E83F885401AB");
@@ -143,16 +216,23 @@ public partial class SwaggerContext : DbContext
             entity.ToTable("api_responses");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiPathId).HasColumnName("api_path_id");
+            entity.Property(e => e.ApiMethodId).HasColumnName("api_method_id");
             entity.Property(e => e.Code)
                 .HasMaxLength(255)
                 .HasColumnName("code");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
+            entity.Property(e => e.Ref)
+                .HasMaxLength(255)
+                .HasColumnName("$ref");
             entity.Property(e => e.SchemaType)
                 .HasMaxLength(255)
                 .HasColumnName("schema_type");
+
+            entity.HasOne(d => d.ApiMethod).WithMany(p => p.ApiResponses)
+                .HasForeignKey(d => d.ApiMethodId)
+                .HasConstraintName("FK_api_responses_api_path_method");
         });
 
         modelBuilder.Entity<ApiServer>(entity =>
@@ -162,10 +242,33 @@ public partial class SwaggerContext : DbContext
             entity.ToTable("api_servers");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ProjectId).HasColumnName("project_id");
+            entity.Property(e => e.ApiId).HasColumnName("api_id");
+            entity.Property(e => e.Descript)
+                .HasMaxLength(255)
+                .HasColumnName("descript");
             entity.Property(e => e.Url)
                 .HasMaxLength(255)
                 .HasColumnName("url");
+
+            entity.HasOne(d => d.Api).WithMany(p => p.ApiServers)
+                .HasForeignKey(d => d.ApiId)
+                .HasConstraintName("FK_api_servers_apis");
+        });
+
+        modelBuilder.Entity<ApiTag>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__api_tags__3214EC073C006822");
+
+            entity.ToTable("api_tags");
+
+            entity.Property(e => e.ApiPathsId).HasColumnName("api_paths_id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+
+            entity.HasOne(d => d.ApiPaths).WithMany(p => p.ApiTags)
+                .HasForeignKey(d => d.ApiPathsId)
+                .HasConstraintName("FK_api_tags_api_paths");
         });
 
         OnModelCreatingPartial(modelBuilder);

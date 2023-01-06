@@ -7,7 +7,11 @@ public partial class ApiServer
 {
     public int Id { get; set; }
 
-    public int? ProjectId { get; set; }
+    public int? ApiId { get; set; }
 
     public string? Url { get; set; }
+
+    public string? Descript { get; set; }
+
+    public virtual Apis? Api { get; set; }
 }

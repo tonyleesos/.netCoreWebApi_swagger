@@ -26,28 +26,9 @@ namespace swaggerPJ.Controllers
             SwaggerJsonData swaggerJsonData = new SwaggerJsonData()
             {
                 openApi = "3.0.1",
-                ApisData = {
-                     Title = "智慧影像平台",
-                     Description = "智聯所內部專用",
-                     Version = "1.0",
-                     ApiComponents = new List<ApiComponent>(),
-                     ApiPaths = new List<ApiPath>(),
-                     ApiServers=  new List<ApiServer>(),
-                },
-                ApiPathData = {
-
-                },
-                ApiComponentData = {
-
-                },
-                ApiServerData =
-                {
-
-                },
-
                 
             };
-           
+ 
             #pragma warning restore CS8670 // 物件或集合初始設定式意味會解除參考可能為 null 的成員。
 
             string? apisJson = JsonConvert.SerializeObject(swaggerJsonData);

@@ -10,7 +10,8 @@ namespace swaggerPJ.common
     {
         public string? openapi { get; set; }
         public info? info { get; set; } = null!;
-        public Paths? paths { get; set; }
+        // public Paths? paths { get; set; }
+        public Dictionary<string, Dictionary<string, PathMethodProperty>> paths { get; set; } = null!;
         public Component? components { get; set; }
     }
 }

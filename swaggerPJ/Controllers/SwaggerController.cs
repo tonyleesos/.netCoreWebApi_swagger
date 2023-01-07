@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using swaggerPJ.common;
+using swaggerPJ.common.Components;
 using swaggerPJ.common.Path;
 using swaggerPJ.Models;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using static swaggerPJ.common.SwaggerTEST;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace swaggerPJ.Controllers
@@ -22,37 +25,37 @@ namespace swaggerPJ.Controllers
         [HttpGet]
         public FileContentResult JsonContentGetContent()
         {
-            Content content = new Content()
+            swaggerPJ.common.Path.Content content = new swaggerPJ.common.Path.Content()
             {
-                 textplain = new TextPlain()
+                 textplain = new swaggerPJ.common.Path.TextPlain()
                  {
-                      schema= new Schema()
+                      schema= new swaggerPJ.common.Path.Schema()
                       {
                           type= "array",
-                          items = new Items() { @ref = "#/components/schemas/WeatherForecast" }
+                          items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
                       },                   
                  },
-                 textjson = new TextJson()
+                 textjson = new swaggerPJ.common.Path.TextJson()
                  {
-                     schema = new Schema()
+                     schema = new swaggerPJ.common.Path.Schema()
                      {
                          type = "array",
-                         items = new Items() { @ref = "#/components/schemas/WeatherForecast" }
+                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
                      },
                  },
-                 applicationjson = new ApplicationJson()
+                 applicationjson = new swaggerPJ.common.Path.ApplicationJson()
                  {
-                     schema = new Schema()
+                     schema = new swaggerPJ.common.Path.Schema()
                      {
                          type = "array",
-                         items = new Items() { @ref = "#/components/schemas/WeatherForecast" }
+                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
                      },
                  },
-                 applicationjson2= new ApplicationJson() {
-                     schema = new Schema()
+                 applicationjson2= new swaggerPJ.common.Path.ApplicationJson() {
+                     schema = new swaggerPJ.common.Path.Schema()
                      {
                          type = "array",
-                         items = new Items() { @ref = "#/components/schemas/WeatherForecast" }
+                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
                      },
                  }
             };
@@ -64,32 +67,52 @@ namespace swaggerPJ.Controllers
 
             Dictionary<string, PathMethodProperty> pathDictionary = new Dictionary<string, PathMethodProperty>()
             {
-                ["get"] = new PathMethodProperty { tags = new List<string>() { "WeatherForecast" }, responses = new Responses() {  ResponseDictionary = responseProperty }  }
+                ["get"] = new PathMethodProperty { 
+                    tags = new List<string>() { "WeatherForecast" }, 
+                    responses = new Dictionary<string, ResponseProperty>() 
+                    { 
+                        ["200"] = new ResponseProperty (){ content = content , description = "Success" } 
+                    }  
+                }
             };
 
             // json 測試資料內容
-            #pragma warning disable CS8670 // 物件或集合初始設定式意味會解除參考可能為 null 的成員。
             SwaggerJsonData swaggerJsonData = new SwaggerJsonData()
             {
                 openapi = "3.0.1",
                 info = new common.Info.info()
                 {
-                    title="智慧所API",
-                    version="1.0",                   
+                    title = "智慧所API",
+                    version = "1.0",
                 },
-                paths = new common.Path.Paths()
+                paths = new Dictionary<string, Dictionary<string, PathMethodProperty>>()
                 {
-                    PathDictionary = new Dictionary<string, common.Path.PathMethod>()
+                    ["/WeatherForecast"] = pathDictionary
+                },
+                components = new common.Components.Component
+                {
+                    schemas = new Dictionary<string, ComponentSchemasProperty>()
                     {
-                        ["/WeatherForecast"] = new PathMethod(){ PathDictionary = pathDictionary }
+                        ["WeatherForecast"] = new ComponentSchemasProperty() { 
+                            type = "object",
+                            properties = new Dictionary<string, SchemaProperty>()
+                            {
+                                ["data"] = new SchemaProperty() { type = "string",format= "date-time" },
+                                ["temperatureC"] = new SchemaProperty() { type = "integer", format = "int32" },
+                                ["temperatureF"] = new SchemaProperty() { type = "integer", format = "int32",readOnly = true },
+                                ["summary"] = new SchemaProperty() { type = "string",nullable = true }
+                            }, 
+                            additionalProperties = false 
+                        }
                     }
                 }
-
             };
- 
-            #pragma warning restore CS8670 // 物件或集合初始設定式意味會解除參考可能為 null 的成員。
 
-            string? apisJson = JsonConvert.SerializeObject(swaggerJsonData);
+
+            string? apisJson = JsonConvert.SerializeObject(swaggerJsonData, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             var fileName = "xyz.json";
             var mimeType = "application/json";
             var fileBytes = Encoding.Default.GetBytes(apisJson);

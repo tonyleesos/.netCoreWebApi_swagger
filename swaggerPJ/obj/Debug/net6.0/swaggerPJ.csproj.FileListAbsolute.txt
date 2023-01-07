@@ -261,3 +261,4 @@ D:\專案\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\refint\swaggerPJ.dll
 D:\專案\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\swaggerPJ.pdb
 D:\專案\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\swaggerPJ.genruntimeconfig.cache
 D:\專案\.netCoreWebApi_swagger\swaggerPJ\obj\Debug\net6.0\ref\swaggerPJ.dll
+D:\專案\.netCoreWebApi_swagger\swaggerPJ\bin\Debug\net6.0\Swashbuckle.AspNetCore.ReDoc.dll

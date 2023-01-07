@@ -8,8 +8,8 @@ namespace swaggerPJ.common
 {
     public class SwaggerJsonData
     {
-        public string? openApi { get; set; }
-        public info? info { get; set; }
+        public string? openapi { get; set; }
+        public info? info { get; set; } = null!;
         public Paths? paths { get; set; }
         public Component? components { get; set; }
     }

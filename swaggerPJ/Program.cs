@@ -2,6 +2,7 @@ using swaggerPJ.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,9 +40,29 @@ option.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+#region swaggerDoc AddSwaggerGen
+// swaggerDoc
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.CustomSchemaIds(x => x.FullName);
+});
+#endregion
 
 var app = builder.Build();
+
+#region swaggerDoc
+// swaggerDoc
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "swagger-editor-doc/{documentName}/swagger.json";
+    
+});
+app.UseReDoc(c =>
+{
+    c.RoutePrefix = "swagger-editor-doc";
+});
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,6 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

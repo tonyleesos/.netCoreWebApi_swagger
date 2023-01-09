@@ -26,6 +26,7 @@ namespace swaggerPJ.Controllers
         [HttpGet]
         public FileContentResult JsonContentGetContent()
         {
+            #region 假資料1
             swaggerPJ.common.Path.Content content = new swaggerPJ.common.Path.Content()
             {
                  textplain = new swaggerPJ.common.Path.TextPlain()
@@ -60,12 +61,6 @@ namespace swaggerPJ.Controllers
                      },
                  }
             };
-
-            Dictionary<string, ResponseProperty> responseProperty = new Dictionary<string, ResponseProperty>()
-            {
-                ["200"] = new ResponseProperty { description = "Success", content = content }
-            };
-
             Dictionary<string, PathMethodProperty> pathDictionary = new Dictionary<string, PathMethodProperty>()
             {
                 ["get"] = new PathMethodProperty { 
@@ -73,9 +68,48 @@ namespace swaggerPJ.Controllers
                     responses = new Dictionary<string, ResponseProperty>() 
                     { 
                         ["200"] = new ResponseProperty (){ content = content , description = "Success" } 
-                    }  
+                    },  
                 }
             };
+            #endregion
+
+            #region 假資料2
+            swaggerPJ.common.Path.Content content2 = new swaggerPJ.common.Path.Content()
+            {              
+                textjson = new swaggerPJ.common.Path.TextJson()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/Order" }
+                    },
+                },
+                applicationjson = new swaggerPJ.common.Path.ApplicationJson()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/Order" }
+                    },
+                },               
+            };
+            Dictionary<string, PathMethodProperty> pathDictionary2 = new Dictionary<string, PathMethodProperty>()
+            {
+                ["post"] = new PathMethodProperty
+                {
+                    tags = new List<string>() { "store" },
+                    requestBody = new common.Path.RequestBody
+                    {
+                        content = content2
+                    },
+                    responses = new Dictionary<string, ResponseProperty>()
+                    {
+                        ["200"] = new ResponseProperty() { content = content2, description = "Success" },
+                        ["405"] = new ResponseProperty() { description = "Invalid input" }
+                    },
+                }
+            };
+            #endregion
 
             // json 測試資料內容
             SwaggerJsonData swaggerJsonData = new SwaggerJsonData()
@@ -94,8 +128,10 @@ namespace swaggerPJ.Controllers
                 },
                 paths = new Dictionary<string, Dictionary<string, PathMethodProperty>>()
                 {
-                    ["/WeatherForecast"] = pathDictionary
+                    ["/WeatherForecast"] = pathDictionary,
+                    ["/store/order"] = pathDictionary2,
                 },
+
                 components = new common.Components.Component
                 {
                     schemas = new Dictionary<string, ComponentSchemasProperty>()
@@ -110,11 +146,23 @@ namespace swaggerPJ.Controllers
                                 ["summary"] = new SchemaProperty() { type = "string",nullable = true }
                             }, 
                             additionalProperties = false 
+                        },
+                        ["Order"] = new ComponentSchemasProperty()
+                        {
+                            type = "object",
+                            properties = new Dictionary<string, SchemaProperty>()
+                            {
+                                ["id"] = new SchemaProperty() { type = "integer", format = "int64" },
+                                ["petId"] = new SchemaProperty() { type = "integer", format = "int64" },
+                                ["quantity"] = new SchemaProperty() { type = "integer", format = "int32", readOnly = true },
+                                ["shipDate"] = new SchemaProperty() { type = "string", format = "date-time" },
+                                ["status"] = new SchemaProperty() { type = "string"}
+                            },
+                            additionalProperties = false
                         }
                     }
                 }
             };
-
 
             string? apisJson = JsonConvert.SerializeObject(swaggerJsonData, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings
             {

@@ -1,6 +1,4 @@
-﻿using static swaggerPJ.common.SwaggerTEST;
-
-namespace swaggerPJ.common.Path
+﻿namespace swaggerPJ.common.Path
 {
     public class Schema
     {

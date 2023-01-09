@@ -2,7 +2,7 @@
 
 namespace swaggerPJ.common.Path
 {
-    public class Item
+    public class Items
     {
         public string? type { get; set; }
 

@@ -2,7 +2,7 @@
 {
     public class info
     {
-        public string? title { get; set; }
-        public string? version { get; set; }
+        public string? title { get; set; } = null!;
+        public string? version { get; set; } = null!;
     }
 }

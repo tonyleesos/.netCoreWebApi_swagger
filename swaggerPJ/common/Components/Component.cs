@@ -5,6 +5,8 @@ namespace swaggerPJ.common.Components
 {
     public class Component
     {
-        public ComponentSchemas? componentSchemas { get; set; }
+        //public ComponentSchemas? schemas { get; set; } 
+
+        public Dictionary<string, ComponentSchemasProperty>? schemas { get; set; }
     }
 }

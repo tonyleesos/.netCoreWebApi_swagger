@@ -7,6 +7,6 @@ namespace swaggerPJ.common.Path
         public List<string>? tags { get; set; }
         public List<Parameters>? parameters { get; set; }
         public RequestBody? requestBody { get; set; }
-        public Responses? responses { get; set; }
+        public Dictionary<string, ResponseProperty>? responses { get; set; }
     }
 }

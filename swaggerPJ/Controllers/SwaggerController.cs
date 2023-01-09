@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using swaggerPJ.common;
 using swaggerPJ.common.Components;
 using swaggerPJ.common.Path;
+using swaggerPJ.common.Servers;
 using swaggerPJ.Models;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,12 @@ namespace swaggerPJ.Controllers
                 {
                     title = "智慧所API",
                     version = "1.0",
+                },
+                servers = new List<Server>() 
+                {
+                   new Server(){url = "https://localhost:44395" },
+                   new Server(){url = "https://localhost:44396" },
+                   new Server(){url = "https://localhost:44397" },
                 },
                 paths = new Dictionary<string, Dictionary<string, PathMethodProperty>>()
                 {

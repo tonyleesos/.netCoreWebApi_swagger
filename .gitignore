@@ -353,3 +353,7 @@ clin.irmsapi.xml
 clin.christmasapi.xml
 src/clin.tlioc20api/clin.tlioc20api.xml
 src/clin.tlioc20api/config/appsettings.json
+/.vs
+/.vs
+/swaggerPJ/bin
+/swaggerPJ/obj

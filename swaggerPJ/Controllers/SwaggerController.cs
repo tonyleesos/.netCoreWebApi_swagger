@@ -29,53 +29,60 @@ namespace swaggerPJ.Controllers
             #region 假資料1
             swaggerPJ.common.Path.Content content = new swaggerPJ.common.Path.Content()
             {
-                 textplain = new swaggerPJ.common.Path.TextPlain()
-                 {
-                      schema= new swaggerPJ.common.Path.Schema()
-                      {
-                          type= "array",
-                          items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
-                      },                   
-                 },
-                 textjson = new swaggerPJ.common.Path.TextJson()
-                 {
-                     schema = new swaggerPJ.common.Path.Schema()
-                     {
-                         type = "array",
-                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
-                     },
-                 },
-                 applicationjson = new swaggerPJ.common.Path.ApplicationJson()
-                 {
-                     schema = new swaggerPJ.common.Path.Schema()
-                     {
-                         type = "array",
-                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
-                     },
-                 },
-                 applicationjson2= new swaggerPJ.common.Path.ApplicationJson() {
-                     schema = new swaggerPJ.common.Path.Schema()
-                     {
-                         type = "array",
-                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
-                     },
-                 }
-            };
-            Dictionary<string, PathMethodProperty> pathDictionary = new Dictionary<string, PathMethodProperty>()
-            {
-                ["get"] = new PathMethodProperty { 
-                    tags = new List<string>() { "WeatherForecast" }, 
-                    responses = new Dictionary<string, ResponseProperty>() 
-                    { 
-                        ["200"] = new ResponseProperty (){ content = content , description = "Success" } 
-                    },  
+                textplain = new swaggerPJ.common.Path.TextPlain()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
+                    },
+                },
+                textjson = new swaggerPJ.common.Path.TextJson()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
+                    },
+                },
+                applicationjson = new swaggerPJ.common.Path.ApplicationJson()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
+                    },
+                },
+                applicationjson2 = new swaggerPJ.common.Path.ApplicationJson()
+                {
+                    schema = new swaggerPJ.common.Path.Schema()
+                    {
+                        type = "array",
+                        items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/WeatherForecast" }
+                    },
                 }
             };
+            // var apiPaths = _swaggerContext.ApiPaths.ToList();
+            Dictionary<string, PathMethodProperty> pathDictionary = new Dictionary<string, PathMethodProperty>()
+            {
+                ["get"] = new PathMethodProperty
+                {
+                    tags = new List<string>() { "WeatherForecast" },
+                    responses = new Dictionary<string, ResponseProperty>()
+                    {
+                        ["200"] = new ResponseProperty() { content = content, description = "Success" }
+                    },
+                }
+            };
+            //foreach (var apiPath in apiPaths)
+            //{
+            //    pathDictionary.Add(apiPath.Method, apiPath);
+            //}
             #endregion
 
             #region 假資料2
             swaggerPJ.common.Path.Content content2 = new swaggerPJ.common.Path.Content()
-            {              
+            {
                 textjson = new swaggerPJ.common.Path.TextJson()
                 {
                     schema = new swaggerPJ.common.Path.Schema()
@@ -91,7 +98,7 @@ namespace swaggerPJ.Controllers
                         type = "array",
                         items = new swaggerPJ.common.Path.Items() { @ref = "#/components/schemas/Order" }
                     },
-                },               
+                },
             };
             Dictionary<string, PathMethodProperty> pathDictionary2 = new Dictionary<string, PathMethodProperty>()
             {
@@ -110,7 +117,6 @@ namespace swaggerPJ.Controllers
                 }
             };
             #endregion
-
             // json 測試資料內容
             SwaggerJsonData swaggerJsonData = new SwaggerJsonData()
             {
@@ -120,7 +126,7 @@ namespace swaggerPJ.Controllers
                     title = _swaggerContext.ApiInfos.Select(x => x.Title).FirstOrDefault()?.ToString(),
                     version = _swaggerContext.ApiInfos.Select(x => x.Version).FirstOrDefault()?.ToString(),
                 },
-                servers = _swaggerContext.ApiServers.ToList(),
+                servers = _swaggerContext.ApiServers.Select(x => new Server { url = x.Url, descript = x.Descript }).ToList(),
                 paths = new Dictionary<string, Dictionary<string, PathMethodProperty>>()
                 {
                     ["/WeatherForecast"] = pathDictionary,
@@ -131,16 +137,17 @@ namespace swaggerPJ.Controllers
                 {
                     schemas = new Dictionary<string, ComponentSchemasProperty>()
                     {
-                        ["WeatherForecast"] = new ComponentSchemasProperty() { 
+                        ["WeatherForecast"] = new ComponentSchemasProperty()
+                        {
                             type = "object",
                             properties = new Dictionary<string, SchemaProperty>()
                             {
-                                ["data"] = new SchemaProperty() { type = "string",format= "date-time" },
+                                ["data"] = new SchemaProperty() { type = "string", format = "date-time" },
                                 ["temperatureC"] = new SchemaProperty() { type = "integer", format = "int32" },
-                                ["temperatureF"] = new SchemaProperty() { type = "integer", format = "int32",readOnly = true },
-                                ["summary"] = new SchemaProperty() { type = "string",nullable = true }
-                            }, 
-                            additionalProperties = false 
+                                ["temperatureF"] = new SchemaProperty() { type = "integer", format = "int32", readOnly = true },
+                                ["summary"] = new SchemaProperty() { type = "string", nullable = true }
+                            },
+                            additionalProperties = false
                         },
                         ["Order"] = new ComponentSchemasProperty()
                         {
@@ -151,7 +158,7 @@ namespace swaggerPJ.Controllers
                                 ["petId"] = new SchemaProperty() { type = "integer", format = "int64" },
                                 ["quantity"] = new SchemaProperty() { type = "integer", format = "int32", readOnly = true },
                                 ["shipDate"] = new SchemaProperty() { type = "string", format = "date-time" },
-                                ["status"] = new SchemaProperty() { type = "string"}
+                                ["status"] = new SchemaProperty() { type = "string" }
                             },
                             additionalProperties = false
                         }

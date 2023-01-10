@@ -9,13 +9,17 @@ public partial class ApiPath
 
     public int? ApiId { get; set; }
 
-    public string? Path { get; set; }
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 
-    public virtual Apis? Apis { get; set; }
+    public string? Method { get; set; }
 
-    public virtual ICollection<ApiPathMethod> ApiPathMethods { get; } = new List<ApiPathMethod>();
+    public virtual ApiInfo? Api { get; set; }
+
+    public virtual ICollection<ApiRequestbody> ApiRequestbodies { get; } = new List<ApiRequestbody>();
+
+    public virtual ICollection<ApiResponse> ApiResponses { get; } = new List<ApiResponse>();
 
     public virtual ICollection<ApiTag> ApiTags { get; } = new List<ApiTag>();
 }

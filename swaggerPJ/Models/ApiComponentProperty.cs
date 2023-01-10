@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace swaggerPJ.Models;
 
-public partial class ApiProperty
+public partial class ApiComponentProperty
 {
     public int Id { get; set; }
 
@@ -13,5 +13,11 @@ public partial class ApiProperty
 
     public string? Format { get; set; }
 
+    public bool? ReadOnly { get; set; }
+
+    public bool? Nullable { get; set; }
+
     public int? ApiComponentsId { get; set; }
+
+    public virtual ApiComponent? ApiComponents { get; set; }
 }

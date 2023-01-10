@@ -117,15 +117,10 @@ namespace swaggerPJ.Controllers
                 openapi = "3.0.1",
                 info = new common.Info.info()
                 {
-                    title = "智慧所API",
-                    version = "1.0",
+                    title = _swaggerContext.ApiInfos.Select(x => x.Title).FirstOrDefault()?.ToString(),
+                    version = _swaggerContext.ApiInfos.Select(x => x.Version).FirstOrDefault()?.ToString(),
                 },
-                servers = new List<Server>() 
-                {
-                   new Server(){url = "https://localhost:44395" },
-                   new Server(){url = "https://localhost:44396" },
-                   new Server(){url = "https://localhost:44397" },
-                },
+                servers = _swaggerContext.ApiServers.ToList(),
                 paths = new Dictionary<string, Dictionary<string, PathMethodProperty>>()
                 {
                     ["/WeatherForecast"] = pathDictionary,

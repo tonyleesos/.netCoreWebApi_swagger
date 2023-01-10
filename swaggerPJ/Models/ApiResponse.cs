@@ -7,7 +7,7 @@ public partial class ApiResponse
 {
     public int Id { get; set; }
 
-    public int? ApiMethodId { get; set; }
+    public int? ApiPathsId { get; set; }
 
     public string? Code { get; set; }
 
@@ -17,5 +17,7 @@ public partial class ApiResponse
 
     public string? Ref { get; set; }
 
-    public virtual ApiPathMethod? ApiMethod { get; set; }
+    public string? Tpye { get; set; }
+
+    public virtual ApiPath? ApiPaths { get; set; }
 }

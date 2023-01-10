@@ -1,8 +1,8 @@
-using swaggerPJ.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.OpenApi.Models;
+using swaggerPJ.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

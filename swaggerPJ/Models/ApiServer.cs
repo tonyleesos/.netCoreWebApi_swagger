@@ -14,5 +14,4 @@ public partial class ApiServer
     public string? Descript { get; set; }
 
     public virtual ApiInfo? Api { get; set; }
-
 }

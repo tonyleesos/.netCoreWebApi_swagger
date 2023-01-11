@@ -14,6 +14,4 @@ public partial class ApiRequestbody
     public string? Ref { get; set; }
 
     public string? Tpye { get; set; }
-
-    public virtual ApiPath? ApiPaths { get; set; }
 }

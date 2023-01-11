@@ -7,19 +7,25 @@ public partial class ApiPath
 {
     public int Id { get; set; }
 
-    public int? ApiId { get; set; }
-
     public string? Name { get; set; }
 
     public string? Description { get; set; }
 
     public string? Method { get; set; }
 
-    public virtual ApiInfo? Api { get; set; }
+    public string? RequestBodyItems { get; set; }
 
-    public virtual ICollection<ApiRequestbody> ApiRequestbodies { get; } = new List<ApiRequestbody>();
+    public string? Tags { get; set; }
 
-    public virtual ICollection<ApiResponse> ApiResponses { get; } = new List<ApiResponse>();
+    public string? ResponseItems { get; set; }
 
-    public virtual ICollection<ApiTag> ApiTags { get; } = new List<ApiTag>();
+    public string? InternalPath { get; set; }
+
+    public int? InternalPort { get; set; }
+
+    public string? ExternalPath { get; set; }
+
+    public string? IsPublic { get; set; }
+
+    public int? UserId { get; set; }
 }

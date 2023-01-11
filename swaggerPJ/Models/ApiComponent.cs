@@ -13,7 +13,5 @@ public partial class ApiComponent
 
     public string? Type { get; set; }
 
-    public virtual ApiInfo? Api { get; set; }
-
     public virtual ICollection<ApiComponentProperty> ApiComponentProperties { get; } = new List<ApiComponentProperty>();
 }

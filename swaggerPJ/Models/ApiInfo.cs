@@ -13,9 +13,5 @@ public partial class ApiInfo
 
     public string Version { get; set; } = null!;
 
-    public virtual ICollection<ApiComponent> ApiComponents { get; } = new List<ApiComponent>();
-
-    public virtual ICollection<ApiPath> ApiPaths { get; } = new List<ApiPath>();
-
     public virtual ICollection<ApiServer> ApiServers { get; } = new List<ApiServer>();
 }

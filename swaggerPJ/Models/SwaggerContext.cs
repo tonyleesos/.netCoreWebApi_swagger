@@ -45,10 +45,7 @@ public partial class SwaggerContext : DbContext
 
             entity.ToTable("api_components");
 
-            entity.HasIndex(e => e.ApiId, "IX_api_components").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiId).HasColumnName("api_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
@@ -78,8 +75,8 @@ public partial class SwaggerContext : DbContext
                 .HasColumnName("type");
 
             entity.HasOne(d => d.ApiComponents).WithMany(p => p.ApiComponentProperties)
-                .HasPrincipalKey(p => p.ApiId)
                 .HasForeignKey(d => d.ApiComponentsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_api_component_property_api_components");
         });
 

@@ -17,7 +17,7 @@ public partial class ApiComponentProperty
 
     public bool? Nullable { get; set; }
 
-    public int? ApiComponentsId { get; set; }
+    public int ApiComponentsId { get; set; }
 
-    public virtual ApiComponent? ApiComponents { get; set; }
+    public virtual ApiComponent ApiComponents { get; set; } = null!;
 }

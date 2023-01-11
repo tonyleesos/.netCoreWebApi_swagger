@@ -1,5 +1,4 @@
-﻿using static swaggerPJ.common.SwaggerTEST;
-
+﻿
 namespace swaggerPJ.common.Path
 {
     public class Parameters

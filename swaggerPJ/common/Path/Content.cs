@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using static swaggerPJ.common.SwaggerTEST;
 
 namespace swaggerPJ.common.Path
 {

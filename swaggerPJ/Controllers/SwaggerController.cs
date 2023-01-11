@@ -154,6 +154,9 @@ namespace swaggerPJ.Controllers
         [HttpGet]
         public FileContentResult JsonContentGetContentV2()
         {
+            // dblist
+            List<ApiPath> apiPathList = _swaggerContext.ApiPaths.ToList();
+            List<ApiComponent> apiComponentList = _swaggerContext.ApiComponents.ToList();
             // json 測試資料內容
             SwaggerJsonDataV2 swaggerJsonData = new SwaggerJsonDataV2()
             {
@@ -168,119 +171,81 @@ namespace swaggerPJ.Controllers
                     new Server() { url = "https://localhost:44396" },
                     new Server() { url = "https://localhost:44397" },
                 },
-                paths = new Dictionary<string, swaggerPJ.commonV2.Path.PathMethodProperty>()
+                paths = new Dictionary<string, swaggerPJ.commonV2.Path.PathMethodProperty>(),
+                components = new Component() { schemas = new Dictionary<string, ComponentSchemasProperty>()}             
+            };
+            // api Path
+            foreach(var apiPath in apiPathList)
+            {
+                // 包裝pathProperty 並塞DB資料
+                swaggerPJ.commonV2.Path.PathMethodProperty PathMethodPropertyData = new swaggerPJ.commonV2.Path.PathMethodProperty()
                 {
-                    ["/WeatherForecast"] = new swaggerPJ.commonV2.Path.PathMethodProperty
+                    post = new swaggerPJ.commonV2.Path.Post()
                     {
-                        post = new swaggerPJ.commonV2.Path.Post
+                        tags = new List<string>() { apiPath.Tags.ToString() },
+                        requestBody = new commonV2.Path.RequestBody()
                         {
-                            tags = new List<string>() { "WeatherForecast" },
-                            requestBody = new commonV2.Path.RequestBody()
+                            content = new commonV2.Path.Content()
                             {
-                                content = new commonV2.Path.Content()
+                                applicationjson = new commonV2.Path.ApplicationJson()
                                 {
-                                    applicationjson = new commonV2.Path.ApplicationJson()
+                                    schema = new commonV2.Path.Schema()
                                     {
-                                        schema = new commonV2.Path.Schema()
+                                        type = "array",
+                                        items = new commonV2.Path.Items()
                                         {
-                                            type = "array",
-                                            items = new commonV2.Path.Items()
-                                            {
-                                                @ref = "#/components/schemas/Order"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            responses = new commonV2.Path.Responses()
-                            {
-                                code = new commonV2.Path.Code()
-                                {
-                                    description = "Success",
-                                    content = new commonV2.Path.Content()
-                                    {
-                                        applicationjson = new commonV2.Path.ApplicationJson()
-                                        {
-                                            schema = new commonV2.Path.Schema()
-                                            {
-                                                type = "array",
-                                                items = new commonV2.Path.Items()
-                                                {
-                                                    @ref = "#/components/schemas/Order"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },                      
-                    },
-                    ["/store/order"] = new swaggerPJ.commonV2.Path.PathMethodProperty
-                    {
-                        post = new swaggerPJ.commonV2.Path.Post
-                        {
-                            tags = new List<string>() { "Store" },
-                            requestBody = new commonV2.Path.RequestBody()
-                            {
-                                content = new commonV2.Path.Content()
-                                {
-                                    applicationjson = new commonV2.Path.ApplicationJson()
-                                    {
-                                        schema = new commonV2.Path.Schema()
-                                        {
-                                            type = "array",
-                                            items = new commonV2.Path.Items()
-                                            {
-                                                @ref = "#/components/schemas/Order"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            responses = new commonV2.Path.Responses()
-                            {
-                                code = new commonV2.Path.Code()
-                                {
-                                    description = "Success",
-                                    content = new commonV2.Path.Content()
-                                    {
-                                        applicationjson = new commonV2.Path.ApplicationJson()
-                                        {
-                                            schema = new commonV2.Path.Schema()
-                                            {
-                                                type = "array",
-                                                items = new commonV2.Path.Items()
-                                                {
-                                                    @ref = "#/components/schemas/Order"
-                                                }
-                                            }
+                                            @ref = apiPath.RequestBodyItems.ToString(),
                                         }
                                     }
                                 }
                             }
                         },
-                    },
-                },
-                components = new Component()
-                {
-                    schemas = new Dictionary<string, ComponentSchemasProperty>()
-                    {
-                        ["Order"] = new ComponentSchemasProperty()
-                        {
-                            type = "object",
-                            properties = new Dictionary<string, SchemaProperty>()
+                        responses = new commonV2.Path.Responses()
+                        {                          
+                            code = new commonV2.Path.Code()
                             {
-                                ["id"] = new SchemaProperty() { type = "integer", format = "int64" },
-                                ["petId"] = new SchemaProperty() { type = "integer", format = "int64" },
-                                ["quantity"] = new SchemaProperty() { type = "integer", format = "int32", readOnly = true },
-                                ["shipDate"] = new SchemaProperty() { type = "string", format = "date-time" },
-                                ["status"] = new SchemaProperty() { type = "string" }
-                            },
-                            additionalProperties = false
+                                description = "Success",
+                                content = new commonV2.Path.Content()
+                                {
+                                    applicationjson = new commonV2.Path.ApplicationJson()
+                                    {
+                                        schema = new commonV2.Path.Schema()
+                                        {
+                                            type = "array",
+                                            items = new commonV2.Path.Items()
+                                            {
+                                                @ref = apiPath.ResponseItems.ToString(),
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
+                    },
+                };
+                // push pathProperty
+                swaggerJsonData.paths.TryAdd(apiPath.Name.ToString(), PathMethodPropertyData);
+            }
+            // api Component
+            foreach (var apiComponent in apiComponentList)
+            {
+                // 包裝關聯componentProtery(撈DB資料)
+                Dictionary<string, SchemaProperty> data = apiComponent.ApiComponentProperties.Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type,format = m.Format } }).ToDictionary(d => d.Name, d => d.SchemaProperty);               
+                // 撈DB資料並初始化
+                ComponentSchemasProperty componentSchemasProperty = new ComponentSchemasProperty()
+                {
+                    type = apiComponent.Type.ToString(), 
+                    properties = new Dictionary<string, SchemaProperty>(),
+                    additionalProperties = false
+                };
+                // push 裡面內層
+                foreach(var item in data)
+                {
+                    componentSchemasProperty.properties.TryAdd(item.Key, item.Value);
                 }
-            };
+                // push 最外層
+                swaggerJsonData.components.schemas.TryAdd(apiComponent.Name.ToString(), componentSchemasProperty);
+            }
 
             string? apisJson = JsonConvert.SerializeObject(swaggerJsonData, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings
             {

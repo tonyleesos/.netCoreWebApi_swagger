@@ -158,6 +158,7 @@ namespace swaggerPJ.Controllers
             // dblist
             List<ApiPath> apiPathList = _swaggerContext.ApiPaths.ToList();
             List<ApiComponent> apiComponentList = _swaggerContext.ApiComponents.ToList();
+            List<ApiComponentProperty> apiComponentProperty = _swaggerContext.ApiComponentProperties.ToList();
             // json 測試資料內容
             SwaggerJsonDataV2 swaggerJsonData = new SwaggerJsonDataV2()
             {
@@ -229,15 +230,17 @@ namespace swaggerPJ.Controllers
                     // push pathProperty
                     swaggerJsonData.paths.TryAdd(apiPath.Name.ToString(), PathMethodPropertyData);
                 }
-            }          
+            }                    
             // api Component
             foreach (var apiComponent in apiComponentList)
             {
-                var test = _swaggerContext.ApiComponents.Include(x=>x.ApiComponentProperties).Where(x=>x.Id == x.ApiComponentProperties.Select(x=>x.ApiComponentsId).FirstOrDefault()).FirstOrDefault();
+                Dictionary<string, SchemaProperty> schemaPropertydata = apiComponentProperty.Where(x=>x.ApiComponentsId == apiComponent.Id)
+                                     .Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type, format = m.Format } })
+                                     .ToDictionary(d => d.Name, d => d.SchemaProperty);
                 // 包裝關聯componentProtery(撈DB資料)
-                Dictionary<string, SchemaProperty> schemaPropertydata = apiComponent.ApiComponentProperties
-                                                            .Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type,format = m.Format } })
-                                                            .ToDictionary(d => d.Name, d => d.SchemaProperty);               
+                //Dictionary<string, SchemaProperty> schemaPropertydata = apiComponent.ApiComponentProperties
+                //                                .Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type,format = m.Format } })
+                //                                .ToDictionary(d => d.Name, d => d.SchemaProperty);               
                 // 撈DB資料並初始化
                 ComponentSchemasProperty componentSchemasProperty = new ComponentSchemasProperty()
                 {

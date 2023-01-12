@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using swaggerPJ.common;
 using swaggerPJ.common.Components;
@@ -177,34 +178,16 @@ namespace swaggerPJ.Controllers
             // api Path
             foreach(var apiPath in apiPathList)
             {
-                // 包裝pathProperty 並塞DB資料
-                swaggerPJ.commonV2.Path.PathMethodProperty PathMethodPropertyData = new swaggerPJ.commonV2.Path.PathMethodProperty()
+                if(apiPath != null)
                 {
-                    post = new swaggerPJ.commonV2.Path.Post()
+                    // 包裝pathProperty 並塞DB資料
+                    swaggerPJ.commonV2.Path.PathMethodProperty PathMethodPropertyData = new swaggerPJ.commonV2.Path.PathMethodProperty()
                     {
-                        tags = new List<string>() { apiPath.Tags.ToString() },
-                        requestBody = new commonV2.Path.RequestBody()
+                        post = new swaggerPJ.commonV2.Path.Post()
                         {
-                            content = new commonV2.Path.Content()
+                            tags = new List<string>() { apiPath.Tags.ToString() },
+                            requestBody = new commonV2.Path.RequestBody()
                             {
-                                applicationjson = new commonV2.Path.ApplicationJson()
-                                {
-                                    schema = new commonV2.Path.Schema()
-                                    {
-                                        type = "array",
-                                        items = new commonV2.Path.Items()
-                                        {
-                                            @ref = apiPath.RequestBodyItems.ToString(),
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        responses = new commonV2.Path.Responses()
-                        {                          
-                            code = new commonV2.Path.Code()
-                            {
-                                description = "Success",
                                 content = new commonV2.Path.Content()
                                 {
                                     applicationjson = new commonV2.Path.ApplicationJson()
@@ -214,23 +197,47 @@ namespace swaggerPJ.Controllers
                                             type = "array",
                                             items = new commonV2.Path.Items()
                                             {
-                                                @ref = apiPath.ResponseItems.ToString(),
+                                                @ref = apiPath.RequestBodyItems.ToString(),
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            responses = new commonV2.Path.Responses()
+                            {                          
+                                code = new commonV2.Path.Code()
+                                {
+                                    description = "Success",
+                                    content = new commonV2.Path.Content()
+                                    {
+                                        applicationjson = new commonV2.Path.ApplicationJson()
+                                        {
+                                            schema = new commonV2.Path.Schema()
+                                            {
+                                                type = "array",
+                                                items = new commonV2.Path.Items()
+                                                {
+                                                    @ref = apiPath.ResponseItems.ToString(),
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                    },
-                };
-                // push pathProperty
-                swaggerJsonData.paths.TryAdd(apiPath.Name.ToString(), PathMethodPropertyData);
-            }
+                        },
+                    };
+                    // push pathProperty
+                    swaggerJsonData.paths.TryAdd(apiPath.Name.ToString(), PathMethodPropertyData);
+                }
+            }          
             // api Component
             foreach (var apiComponent in apiComponentList)
             {
+                var test = _swaggerContext.ApiComponents.Include(x=>x.ApiComponentProperties).Where(x=>x.Id == x.ApiComponentProperties.Select(x=>x.ApiComponentsId).FirstOrDefault()).FirstOrDefault();
                 // 包裝關聯componentProtery(撈DB資料)
-                Dictionary<string, SchemaProperty> data = apiComponent.ApiComponentProperties.Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type,format = m.Format } }).ToDictionary(d => d.Name, d => d.SchemaProperty);               
+                Dictionary<string, SchemaProperty> schemaPropertydata = apiComponent.ApiComponentProperties
+                                                            .Select(m => new { m.Name, SchemaProperty = new SchemaProperty { type = m.Type,format = m.Format } })
+                                                            .ToDictionary(d => d.Name, d => d.SchemaProperty);               
                 // 撈DB資料並初始化
                 ComponentSchemasProperty componentSchemasProperty = new ComponentSchemasProperty()
                 {
@@ -239,7 +246,7 @@ namespace swaggerPJ.Controllers
                     additionalProperties = false
                 };
                 // push 裡面內層
-                foreach(var item in data)
+                foreach(var item in schemaPropertydata)
                 {
                     componentSchemasProperty.properties.TryAdd(item.Key, item.Value);
                 }

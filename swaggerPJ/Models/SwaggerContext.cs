@@ -31,8 +31,6 @@ public partial class SwaggerContext : DbContext
 
     public virtual DbSet<ApiTag> ApiTags { get; set; }
 
-    public virtual DbSet<Sysdiagram> Sysdiagrams { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=.;Database=swagger;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
@@ -213,23 +211,7 @@ public partial class SwaggerContext : DbContext
                 .HasColumnName("name");
         });
 
-        modelBuilder.Entity<Sysdiagram>(entity =>
-        {
-            entity.HasKey(e => e.DiagramId).HasName("PK__sysdiagr__C2B05B6127BA08DF");
-
-            entity.ToTable("sysdiagrams");
-
-            entity.HasIndex(e => new { e.PrincipalId, e.Name }, "UK_principal_name").IsUnique();
-
-            entity.Property(e => e.DiagramId).HasColumnName("diagram_id");
-            entity.Property(e => e.Definition).HasColumnName("definition");
-            entity.Property(e => e.Name)
-                .HasMaxLength(128)
-                .HasColumnName("name");
-            entity.Property(e => e.PrincipalId).HasColumnName("principal_id");
-            entity.Property(e => e.Version).HasColumnName("version");
-        });
-
+        
         OnModelCreatingPartial(modelBuilder);
     }
 

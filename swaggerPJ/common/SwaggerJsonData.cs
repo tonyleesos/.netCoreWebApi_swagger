@@ -1,9 +1,9 @@
-﻿using swaggerPJ.common.Info;
-using swaggerPJ.common.Path;
-using swaggerPJ.common.Components;
-using swaggerPJ.common.Servers;
+﻿using swaggerPJ.common.Servers;
 using System.Reflection.Metadata.Ecma335;
 using swaggerPJ.Models;
+using swaggerPJ.commonV2.Components;
+using swaggerPJ.common.Info;
+using swaggerPJ.common.Path;
 
 namespace swaggerPJ.common
 {

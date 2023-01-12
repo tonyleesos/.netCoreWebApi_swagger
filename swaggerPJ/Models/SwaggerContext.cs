@@ -19,17 +19,19 @@ public partial class SwaggerContext : DbContext
 
     public virtual DbSet<ApiComponentProperty> ApiComponentProperties { get; set; }
 
-    public virtual DbSet<ApiInfo> ApiInfos { get; set; }
-
     public virtual DbSet<ApiPath> ApiPaths { get; set; }
 
-    public virtual DbSet<ApiRequestbody> ApiRequestbodies { get; set; }
+    public virtual DbSet<Permission> Permissions { get; set; }
 
-    public virtual DbSet<ApiResponse> ApiResponses { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<ApiServer> ApiServers { get; set; }
+    public virtual DbSet<RolePermission> RolePermissions { get; set; }
 
-    public virtual DbSet<ApiTag> ApiTags { get; set; }
+    public virtual DbSet<RoleUser> RoleUsers { get; set; }
+
+    public virtual DbSet<Tenant> Tenants { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -39,179 +41,252 @@ public partial class SwaggerContext : DbContext
     {
         modelBuilder.Entity<ApiComponent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__api_comp__3213E83FAD86AF22");
+            entity.HasKey(e => e.Id).HasName("PK__ApiCompo__3214EC07BE4D109B");
 
-            entity.ToTable("api_components");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Type)
-                .HasMaxLength(255)
-                .HasColumnName("type");
+            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.Type).HasMaxLength(255);
         });
 
         modelBuilder.Entity<ApiComponentProperty>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__api_comp__3213E83F20CB9FC2");
+            entity.HasKey(e => e.Id).HasName("PK__ApiCompo__3214EC07DD64438C");
 
-            entity.ToTable("api_component_property");
+            entity.ToTable("ApiComponentProperty");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiComponentsId).HasColumnName("api_components_id");
-            entity.Property(e => e.Format)
-                .HasMaxLength(255)
-                .HasColumnName("format");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Nullable).HasColumnName("nullable");
-            entity.Property(e => e.ReadOnly).HasColumnName("readOnly");
-            entity.Property(e => e.Type)
-                .HasMaxLength(255)
-                .HasColumnName("type");
-
-            entity.HasOne(d => d.ApiComponents).WithMany(p => p.ApiComponentProperties)
-                .HasForeignKey(d => d.ApiComponentsId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_api_component_property_api_components");
-        });
-
-        modelBuilder.Entity<ApiInfo>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__apis__3213E83F6F8A2545");
-
-            entity.ToTable("api_info");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .HasColumnName("description");
-            entity.Property(e => e.Title)
-                .HasMaxLength(255)
-                .HasColumnName("title");
-            entity.Property(e => e.Version)
-                .HasMaxLength(255)
-                .HasColumnName("version");
+            entity.Property(e => e.Format).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.Type).HasMaxLength(255);
         });
 
         modelBuilder.Entity<ApiPath>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__api_path__3213E83F994C512A");
+            entity.HasKey(e => e.Id).HasName("PK__ApiPaths__3214EC0716BAF799");
 
-            entity.ToTable("api_paths");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .HasColumnName("description");
-            entity.Property(e => e.ExternalPath)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.InternalPath)
-                .HasMaxLength(255)
-                .IsUnicode(false);
+            entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.ExternalPath).HasMaxLength(255);
+            entity.Property(e => e.InternalPath).HasMaxLength(255);
             entity.Property(e => e.IsPublic)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength();
-            entity.Property(e => e.Method)
-                .HasMaxLength(255)
-                .HasColumnName("method");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.RequestBodyItems)
-                .HasMaxLength(255)
-                .HasColumnName("requestBodyItems");
-            entity.Property(e => e.ResponseItems)
-                .HasMaxLength(255)
-                .HasColumnName("responseItems");
-            entity.Property(e => e.Tags)
-                .HasMaxLength(255)
-                .HasColumnName("tags");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Method).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.RequestBodyItems).HasMaxLength(255);
+            entity.Property(e => e.ResponseItems).HasMaxLength(255);
+            entity.Property(e => e.Tags).HasMaxLength(255);
+            entity.Property(e => e.UserId).HasColumnName("User_id");
         });
 
-        modelBuilder.Entity<ApiRequestbody>(entity =>
+        modelBuilder.Entity<Permission>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__content__3214EC0728C4CD7D");
+            entity.ToTable("Permission", tb => tb.HasComment("權限資料表"));
 
-            entity.ToTable("api_requestbody");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiPathsId).HasColumnName("api_paths_id");
-            entity.Property(e => e.Ref)
-                .HasMaxLength(255)
-                .HasColumnName("$ref");
-            entity.Property(e => e.SchemaType)
-                .HasMaxLength(255)
-                .HasColumnName("schema_type");
-            entity.Property(e => e.Tpye)
-                .HasMaxLength(255)
-                .HasColumnName("tpye");
-        });
-
-        modelBuilder.Entity<ApiResponse>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__api_resp__3213E83F885401AB");
-
-            entity.ToTable("api_responses");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiPathsId).HasColumnName("api_paths_id");
-            entity.Property(e => e.Code)
-                .HasMaxLength(255)
-                .HasColumnName("code");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasComment("權限識別碼(使用snowflake產生)");
+            entity.Property(e => e.Action)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("動作名稱");
+            entity.Property(e => e.CreatedDate)
+                .HasPrecision(4)
+                .HasComment("資料建立時間");
             entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .HasColumnName("description");
-            entity.Property(e => e.Ref)
-                .HasMaxLength(255)
-                .HasColumnName("$ref");
-            entity.Property(e => e.SchemaType)
-                .HasMaxLength(255)
-                .HasColumnName("schema_type");
-            entity.Property(e => e.Tpye)
-                .HasMaxLength(255)
-                .HasColumnName("tpye");
-        });
-
-        modelBuilder.Entity<ApiServer>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__api_serv__3213E83F7D41E25A");
-
-            entity.ToTable("api_servers");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiId).HasColumnName("api_id");
-            entity.Property(e => e.Descript)
-                .HasMaxLength(255)
-                .HasColumnName("descript");
-            entity.Property(e => e.Url)
-                .HasMaxLength(255)
-                .HasColumnName("url");
-
-            entity.HasOne(d => d.Api).WithMany(p => p.ApiServers)
-                .HasForeignKey(d => d.ApiId)
-                .HasConstraintName("FK_api_servers_apis");
-        });
-
-        modelBuilder.Entity<ApiTag>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__api_tags__3214EC073C006822");
-
-            entity.ToTable("api_tags");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApiPathsId).HasColumnName("api_paths_id");
+                .HasMaxLength(50)
+                .HasComment("權限描述");
+            entity.Property(e => e.Domain)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("領域名稱");
+            entity.Property(e => e.ExternalMethod)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasComment("HTTP 動作 (GET|POST|...)");
+            entity.Property(e => e.ExternalPath)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("對外路徑");
+            entity.Property(e => e.InternalDns)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("對內名稱")
+                .HasColumnName("InternalDNS");
+            entity.Property(e => e.InternalMethod)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasComment("HTTP 動作 (GET|POST|...)");
+            entity.Property(e => e.InternalPath)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasComment("對內路徑");
+            entity.Property(e => e.InternalPort).HasComment("對內Port");
+            entity.Property(e => e.IsPublic)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("是否公開 (0:不公開 1:公開)");
+            entity.Property(e => e.ModifiedDate)
+                .HasPrecision(4)
+                .HasComment("資料異動時間");
             entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("權限名稱");
+            entity.Property(e => e.Protocol)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("通訊方式 0:Restful 1:gRPC 2:WebSocket");
+            entity.Property(e => e.Resource)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("資源名稱");
         });
 
-        
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.ToTable("Role", tb => tb.HasComment("角色資料表"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasComment("角色識別碼(使用snowflake產生)");
+            entity.Property(e => e.CreatedDate)
+                .HasPrecision(4)
+                .HasComment("資料建立時間");
+            entity.Property(e => e.Description)
+                .HasMaxLength(50)
+                .HasComment("Role描述");
+            entity.Property(e => e.ModifiedDate)
+                .HasPrecision(4)
+                .HasComment("資料異動時間");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("Role名稱");
+            entity.Property(e => e.TenantId).HasComment("租戶識別碼");
+            entity.Property(e => e.Type)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("角色類型(保留)");
+        });
+
+        modelBuilder.Entity<RolePermission>(entity =>
+        {
+            entity.HasKey(e => new { e.RoleId, e.PermissionId });
+
+            entity.ToTable("RolePermission", tb => tb.HasComment("角色權限對應表"));
+
+            entity.Property(e => e.RoleId).HasComment("權限識別碼");
+            entity.Property(e => e.PermissionId).HasComment("權限識別碼");
+        });
+
+        modelBuilder.Entity<RoleUser>(entity =>
+        {
+            entity.HasKey(e => new { e.RoleId, e.UserId });
+
+            entity.ToTable("RoleUser", tb => tb.HasComment("角色使用者對應表"));
+
+            entity.Property(e => e.RoleId).HasComment("角色識別碼");
+            entity.Property(e => e.UserId).HasComment("使用者識別碼");
+        });
+
+        modelBuilder.Entity<Tenant>(entity =>
+        {
+            entity.ToTable("Tenant", tb => tb.HasComment("租戶資料表"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasComment("租戶識別碼(使用snowflake產生)");
+            entity.Property(e => e.CreatedDate)
+                .HasPrecision(4)
+                .HasComment("資料建立時間");
+            entity.Property(e => e.Description)
+                .HasMaxLength(50)
+                .HasComment("租戶描述");
+            entity.Property(e => e.ModifiedDate)
+                .HasPrecision(4)
+                .HasComment("資料異動時間");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("租戶名稱");
+            entity.Property(e => e.Status)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("租戶狀態; 0：停用 1：啟用");
+            entity.Property(e => e.Type)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("租戶類型 (R:根租戶, G:一般租戶)");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("User", tb => tb.HasComment("使用者資料表"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasComment("使用者識別碼(使用snowflake產生)");
+            entity.Property(e => e.AccessFailedCount).HasComment("驗證登入錯誤的次數");
+            entity.Property(e => e.Account)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("使用者登入帳號，必須唯一");
+            entity.Property(e => e.CreatedDate)
+                .HasPrecision(4)
+                .HasComment("資料建立時間");
+            entity.Property(e => e.DepName)
+                .HasMaxLength(20)
+                .HasComment("部門名稱");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasComment("email帳號");
+            entity.Property(e => e.EmailConfirmed).HasComment("電子郵件是否已確認");
+            entity.Property(e => e.FavoriteLink)
+                .HasMaxLength(1000)
+                .HasDefaultValueSql("('')")
+                .HasComment("我的最愛連結");
+            entity.Property(e => e.LockoutEnabled).HasComment("使用者帳號是否已鎖定");
+            entity.Property(e => e.LockoutEnd)
+                .HasPrecision(4)
+                .HasComment("使用者帳號鎖定到期時間 (UTC偏移)");
+            entity.Property(e => e.LoginDate)
+                .HasPrecision(4)
+                .HasComment("上次成功登入時間");
+            entity.Property(e => e.ModifiedDate)
+                .HasPrecision(4)
+                .HasComment("資料異動時間");
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(128)
+                .IsUnicode(false)
+                .HasComment("使用者登入密碼");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasComment("手機號碼");
+            entity.Property(e => e.PhoneNumberConfirmed).HasComment("手機號碼是否已確認");
+            entity.Property(e => e.StaffCode)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasComment("員工編號");
+            entity.Property(e => e.Status)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasComment("使用者帳號狀態; 0：停用 1：啟用");
+            entity.Property(e => e.Tel)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasComment("室內電話");
+            entity.Property(e => e.UserName)
+                .HasMaxLength(50)
+                .HasComment("使用者名稱");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 

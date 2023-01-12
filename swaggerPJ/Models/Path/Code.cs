@@ -1,4 +1,4 @@
-﻿namespace swaggerPJ.commonV2.Path
+﻿namespace swaggerPJ.Models.Path
 {
     public class Code
     {

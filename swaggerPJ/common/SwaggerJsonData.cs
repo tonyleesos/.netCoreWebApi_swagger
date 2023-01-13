@@ -1,7 +1,7 @@
 ﻿using swaggerPJ.common.Servers;
 using System.Reflection.Metadata.Ecma335;
 using swaggerPJ.Models;
-using swaggerPJ.commonV2.Components;
+using swaggerPJ.Models.Components;
 using swaggerPJ.common.Info;
 using swaggerPJ.common.Path;
 

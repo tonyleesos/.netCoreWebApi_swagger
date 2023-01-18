@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "智慧所API123456",
+        "title": "智慧所API",
         "version": "1.0"
     },
     "servers": [{
